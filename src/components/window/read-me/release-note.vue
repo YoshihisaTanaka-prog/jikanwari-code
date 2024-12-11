@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>リリースノート {{ appData.name }} ver.{{ appData.version }}</h1>
+    <h1>リリースノート<br>{{ appData.name }} ver.{{ appData.version }}</h1>
     <div id="release-note-output"></div>
   </div>
 </template>
@@ -11,7 +11,7 @@
   const appData = window.appData;
 
   $.get(window.appData.releasenotePage + window.appData.version.replaceAll(".", "-") + ".html", (code)=>{
-    const bodyCode = $(code).find("body").html();
+    const bodyCode = code.split("<body>")[1].split("</body>")[0];
     $("#release-note-output").html(bodyCode);
   });
 </script>
