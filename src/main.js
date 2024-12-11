@@ -5,7 +5,7 @@ import { createApp } from 'vue'
 import packageJson   from '../package.json';
 import App           from './App.vue'
 
-window.appData = {version : packageJson.version, name: packageJson.displayName};
+window.appData = {version : packageJson.version, name: packageJson.displayName, githubUrl: packageJson.repository.github};
 
 const setMainContentHeight = function(){
   window.tabHeight = $("#tab").outerHeight() + $("#tab-border").outerHeight();
