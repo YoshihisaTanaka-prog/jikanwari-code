@@ -10,7 +10,7 @@
 
   const appData = window.appData;
 
-  $.get(window.appData.githubUrl + window.appData.version.replaceAll(".", "-") + ".html", (code)=>{
+  $.get(window.appData.releasenotePage + window.appData.version.replaceAll(".", "-") + ".html", (code)=>{
     const bodyCode = $(code).find("body").html();
     $("#release-note-output").html(bodyCode);
   });
