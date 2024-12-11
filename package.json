@@ -2,7 +2,7 @@
   "name": "jikanwari",
   "displayName": "時間割生成機",
   "version": "0.1.0",
-  "releasenotePage": "",
+  "releasenotePage": "https://yoshihisatanaka-prog.github.io/jikanwari-code/",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
