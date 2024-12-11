@@ -11,7 +11,7 @@
 
 <template>
   <li>
-    <button v-on:click="clicked" :class="isClicked ? 'selected-btn' : 'unselected-btn'">{{ text }}</button>
+    <button v-on:click="clicked" :class="isClicked ? 'selected-btn tab-btn' : 'tab-btn'">{{ text }}</button>
   </li>
 </template>
 
@@ -23,6 +23,7 @@
     color: #fff;
     background-color: #333;
     width: 7.5rem;
+    height: 100%;
   }
   button:hover{
     background-color: #555;
