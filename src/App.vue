@@ -2,20 +2,45 @@
   import { ref } from "vue";
   import TabItem from "./components/TabItem.vue";
 
-  import Default from "./components/window/default/00-main.vue";
+  import Top from "./components/window/top/00-main.vue";
+  import ReadMe from "./components/window/read-me/00-main.vue";
   import License from "./components/window/license/00-main.vue";
 
-  const currentTabId = ref("default");
+  const currentTabId = ref("");
+
+  const step = ref(0);
+  const drawTabList = [
+    ["top", "readMe", "license"],
+    ["top", "readMe", "license"],
+  ];
   const tabData = {
-    "default" : {
-      text: "メイン",
-      cmp: Default,
+    top : {
+      text: "トップ",
+      cmp: Top,
+      props: {}
     },
-    "license" : {
+    readMe : {
+      text: "説明書",
+      cmp: ReadMe,
+      props: {
+        didUpdate: false
+      }
+    },
+    license : {
       text: "ライセンス",
       cmp: License,
+      props: {}
     }
   };
+
+  const savedVersion = localStorage.getItem("version");
+  if(localStorage.getItem("version") == window.appData.version){
+    currentTabId.value = "top";
+  } else {
+    localStorage.setItem("version", window.appData.version);
+    tabData.readMe.props.didUpdate = !(savedVersion == null);
+    currentTabId.value = "readMe";
+  }
 
   function onClickTabButton(id){
     if(currentTabId.value != id) {
@@ -26,33 +51,15 @@
 
 <template>
   <header>
-    <ul id="tab">
-      <TabItem v-for="tabId in Object.keys(tabData)" :key="tabId" :tab-id="tabId" :text="tabData[tabId].text" :is-clicked="tabId == currentTabId" @onclick="(id) => {onClickTabButton(id)}" />
+    <ul id="tab" class="tab">
+      <TabItem v-for="tabId in drawTabList[step]" :key="tabId" :tab-id="tabId" :text="tabData[tabId].text" :is-clicked="tabId == currentTabId" @onclick="(id) => {onClickTabButton(id)}" />
     </ul>
-    <hr>
+    <hr id="tab-border" class="tab-border">
   </header>
 
   <main>
-    <div v-for="key in Object.keys(tabData)" :key="key" :class="currentTabId == key ? 'selected-window' : 'unselected-window'">
-      <component :is="tabData[key].cmp" />
+    <div v-for="tabId in drawTabList[step]" :key="tabId" :class="currentTabId == tabId ? 'window' : 'unselected-window window'">
+      <component :is="tabData[tabId].cmp" :props="tabData[tabId].props" />
     </div>
   </main>
 </template>
-
-<style scoped>
-  #tab {
-    display: inline-block;
-    padding-left:0;
-    list-style: none;
-    margin-block: 0;
-    place-items: left;
-    background-color: #777;
-    width: 100%;
-  }
-  hr {
-    margin: 0;
-  }
-  .unselected-window{
-    display: none;
-  }
-</style>

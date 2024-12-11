@@ -1,54 +1,55 @@
 <template>
-  <div>
-    <h1>{{ title }}</h1>
-    <button @click="toggleLanguage">
-      {{ isShowingEnglish ? '日本語で表示' : 'Show in English' }}
-    </button>
-    <pre class="license-remark">{{ isShowingEnglish ? 'Note1: The Japanese translation is for reference only; the English version has legal effect.' : "注釈1: 日本語訳は参考用であり、法的効力を持つのは英語版です。\n\n以下は、MITライセンスの日本語訳です。法的に有効なのはオリジナルの英語版です。" }}</pre>
-    <pre class="license-main">{{ licenseContent }}</pre>
-    <pre class="license-remark">{{ isShowingEnglish ? 'Note2: This is a plain text version of the MIT License.' : '注釈2: これはMITライセンスの日本語訳です。' }}</pre>
+  <ul class="tab">
+    <TabItem v-for="tabId in Object.keys(tabData)" :key="tabId" :tab-id="tabId" :text="tabData[tabId].text" :is-clicked="tabId == currentTabId" @onclick="(id) => {onClickTabButton(id)}" />
+  </ul>
+  <hr class="tab-border">
+  <div v-for="key in Object.keys(tabData)" :key="key" :class="currentTabId == key ? 'content' : 'unselected-content content'">
+    <component :is="tabData[key].cmp" :title="licenseTitle" :content="licenseContent" :remark1="remark1" :remark2="remark2" />
   </div>
 </template>
 
-<style scoped>
-  div {
-    font-size: 1rem;
-  }
-
-  .license-remark {
-    font-size: 0.7em;
-  }
-
-  .license-main {
-    padding: 1em;
-    border-radius: 5px;
-    overflow: auto;
-  }
-
-  button {
-    margin: 1rem 0;
-    padding: 0.5rem 1rem;
-    border: none;
-    background: #333;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
-  button:hover {
-    background: #555;
-  }
-</style>
-
 <script setup>
-import { ref, computed } from 'vue';
+  import { ref, computed, defineProps } from 'vue';
+  defineProps(["props"]);
+  import TabItem from "../../TabItem.vue";
 
-// 現在の言語（英語または日本語）を保持
-const isShowingEnglish = ref(true);
+  import MyLicense from './my-license.vue';
 
-// 英語版と日本語版のライセンステキスト
-const licenseText = {
-  en: `Copyright (c) 2024 Yoshihisa Tanaka
+  const currentTabId = ref("en");
+  const tabData = {
+    "en" : {
+      text: "English ver",
+      cmp: MyLicense
+    },
+    "ja" : {
+      text: "日本語版",
+      cmp: MyLicense
+    }
+  };
+
+  function onClickTabButton(id){
+    if(currentTabId.value != id) {
+      currentTabId.value = id;
+    }
+  }
+
+  const licenseRemarkObj = {
+    "1": {
+      "en": "Note1: The Japanese translation is for reference only; the English version has legal effect.",
+      "ja": "注釈1: 日本語訳は参考用であり、法的効力を持つのは英語版です。\n\n以下は、MITライセンスの日本語訳です。法的に有効なのはオリジナルの英語版です。"
+    },
+    "2": {
+      "en": "Note2: This is a plain text version of the MIT License.",
+      "ja": "注釈2: これはMITライセンスの日本語訳です。"
+    }
+  }
+
+  const licenseTitleObj = {
+    "en": "MIT License",
+    "ja": "MITライセンス"
+  }
+  const licenseContentObj = {
+    en: `Copyright (c) 2024 Yoshihisa Tanaka
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,7 +68,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.`,
-  ja: `Copyright (c) 2024 田中義久
+   ja: `Copyright (c) 2024 田中 義久
 
 本ソフトウェアおよび関連する文書のファイル（以下「ソフトウェア」）の複製を取得した全ての人物に対し、
 以下の条件に従うことを前提に、ソフトウェアを無制限に扱うことを無償で許可します。
@@ -85,18 +86,10 @@ SOFTWARE.`,
 著作者または著作権者は、契約、不法行為、またはその他の行為であるかを問わず、
 ソフトウェアまたはソフトウェアの使用もしくはその他に取り扱いに起因または関連して生じる
 いかなる請求、損害賠償、その他の責任について、一切の責任を負いません。`
-};
+  };
 
-// 現在の言語に応じたライセンステキスト
-const licenseContent = computed(() => licenseText[isShowingEnglish.value ? "en" : "ja"]);
-
-// 現在の言語に応じたタイトル
-const title = computed(() =>
-isShowingEnglish.value ? 'MIT License' : 'MITライセンス'
-);
-
-// 言語切り替え関数
-const toggleLanguage = () => {
-  isShowingEnglish.value = !isShowingEnglish.value;
-};
+  const licenseTitle = computed(() => licenseTitleObj[currentTabId.value]);
+  const licenseContent = computed(() => licenseContentObj[currentTabId.value]);
+  const remark1 = computed(() => licenseRemarkObj[1][currentTabId.value]);
+  const remark2 = computed(() => licenseRemarkObj[2][currentTabId.value]);
 </script>
