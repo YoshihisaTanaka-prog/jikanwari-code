@@ -12,5 +12,6 @@ module.exports = defineConfig({
     client: {
       webSocketURL: 'ws://0.0.0.0:8080/ws'
     }
-  }
+  },
+  publicPath: './'
 })

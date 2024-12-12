@@ -3,27 +3,25 @@
   
   const props = defineProps(["tabId", "text", "isClicked"]);
   const $emit = defineEmits(["onclick"]);
-
+  
   function clicked(){
-    $emit("onclick", props.tabId);
+    if(!props.isClicked){
+      $emit("onclick", props.tabId);
+    }
   }
 </script>
 
 <template>
-  <li>
-    <button v-on:click="clicked" :class="isClicked ? 'selected-btn tab-btn' : 'tab-btn'">{{ text }}</button>
-  </li>
+  <button v-on:click="clicked" :class="isClicked ? 'selected-btn menu-btn' : 'menu-btn'">{{ text }}</button>
 </template>
 
 <style scoped>
-  li {
-    display: inline-block;
-  }
   button{
-    color: #fff;
+    color: #0f0;
     background-color: #333;
     width: 7.5rem;
     height: 100%;
+    font-weight: bolder;
   }
   button:hover{
     background-color: #555;

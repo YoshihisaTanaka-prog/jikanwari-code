@@ -1,21 +1,17 @@
 <template>
-  <ul class="tab">
-    <TabItem v-for="tabId in Object.keys(tabData)" :key="tabId" :tab-id="tabId" :text="tabData[tabId].text" :is-clicked="tabId == currentTabId" @onclick="(id) => {onClickTabButton(id)}" />
-  </ul>
-  <hr class="tab-border">
-  <div v-for="key in Object.keys(tabData)" :key="key" :class="currentTabId == key ? 'content' : 'unselected-content content'">
+  <div v-for="key in Object.keys(tabData)" :key="key" :class="currentTabId == key ? 'main-content' : 'unselected-content'">
     <component :is="tabData[key].cmp" :title="licenseTitle" :content="licenseContent" :remark1="remark1" :remark2="remark2" />
   </div>
 </template>
 
 <script setup>
-  import { ref, computed, defineProps } from 'vue';
-  defineProps(["props"]);
-  import TabItem from "../../TabItem.vue";
+  import { computed, defineEmits, defineProps, onMounted } from 'vue';
 
   import MyLicense from './my-license.vue';
 
-  const currentTabId = ref("en");
+  const props = defineProps(["props", "currentTabId"]);
+  const emits = defineEmits(["onMountedMe"]);
+
   const tabData = {
     "en" : {
       text: "English ver",
@@ -27,11 +23,9 @@
     }
   };
 
-  function onClickTabButton(id){
-    if(currentTabId.value != id) {
-      currentTabId.value = id;
-    }
-  }
+  onMounted(()=>{
+    emits("onMountedMe", tabData, "en");
+  });
 
   const licenseRemarkObj = {
     "1": {
@@ -88,8 +82,8 @@ SOFTWARE.`,
 いかなる請求、損害賠償、その他の責任について、一切の責任を負いません。`
   };
 
-  const licenseTitle = computed(() => licenseTitleObj[currentTabId.value]);
-  const licenseContent = computed(() => licenseContentObj[currentTabId.value]);
-  const remark1 = computed(() => licenseRemarkObj[1][currentTabId.value]);
-  const remark2 = computed(() => licenseRemarkObj[2][currentTabId.value]);
+  const licenseTitle = computed(() => licenseTitleObj[props.currentTabId]);
+  const licenseContent = computed(() => licenseContentObj[props.currentTabId]);
+  const remark1 = computed(() => licenseRemarkObj[1][props.currentTabId]);
+  const remark2 = computed(() => licenseRemarkObj[2][props.currentTabId]);
 </script>
