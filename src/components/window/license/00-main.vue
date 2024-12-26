@@ -5,12 +5,13 @@
 </template>
 
 <script setup>
-  import { computed, defineEmits, defineProps, onMounted } from 'vue';
+  import { computed, defineEmits, defineOptions, defineProps, onMounted } from 'vue';
 
   import MyLicense from './my-license.vue';
 
-  const props = defineProps(["props", "currentTabId"]);
-  const emits = defineEmits(["onMountedMe"]);
+  defineOptions({name: "License"});
+  const props = defineProps(["props", "currentTabId", "isFirstVisit", "config", "configWatcher", "step"]);
+  const emits = defineEmits(["updateMe", "updateStep", "updateConfig", "onClickedLink"]);
 
   const tabData = {
     "en" : {
@@ -24,7 +25,7 @@
   };
 
   onMounted(()=>{
-    emits("onMountedMe", tabData, "en");
+    emits("updateMe", tabData, "en");
   });
 
   const licenseRemarkObj = {

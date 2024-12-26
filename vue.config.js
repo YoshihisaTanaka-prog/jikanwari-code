@@ -10,7 +10,7 @@ module.exports = defineConfig({
   },
   devServer: {
     client: {
-      webSocketURL: 'ws://0.0.0.0:8080/ws'
+      webSocketURL: 'ws://0.0.0.0:8081/ws'
     }
   },
   publicPath: './'

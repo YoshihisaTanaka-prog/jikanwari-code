@@ -1,8 +1,10 @@
 <script setup>
-  import { defineEmits, defineProps } from 'vue';
+  import { defineEmits, defineProps, ref } from 'vue';
   
-  const props = defineProps(["tabId", "text", "isClicked"]);
+  const props = defineProps(["mainTabId", "tabId", "text", "isClicked"]);
   const $emit = defineEmits(["onclick"]);
+
+  const btnId = ref(`menu-${props.mainTabId == null ? props.tabTd : [props.mainTabId, props.tabId].join("-")}-btn`)
   
   function clicked(){
     if(!props.isClicked){
@@ -12,7 +14,7 @@
 </script>
 
 <template>
-  <button v-on:click="clicked" :class="isClicked ? 'selected-btn menu-btn' : 'menu-btn'">{{ text }}</button>
+  <button :id="btnId" v-on:click="clicked" :class="isClicked ? 'selected-btn menu-btn' : 'menu-btn'">{{ text }}</button>
 </template>
 
 <style scoped>
@@ -21,7 +23,8 @@
     background-color: #333;
     width: 7.5rem;
     height: 100%;
-    font-weight: bolder;
+    border-radius: 0;
+    border: 1px solid #000;
   }
   button:hover{
     background-color: #555;

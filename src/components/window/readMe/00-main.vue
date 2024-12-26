@@ -1,11 +1,12 @@
 <script setup>
-  import { defineProps, defineEmits, onMounted } from 'vue';
+  import { defineEmits, defineOptions, defineProps, onMounted } from 'vue';
 
   import ReadMeCaution from "./read-me-caution.vue";
   import releaseNote from './release-note.vue';
 
-  const props = defineProps(["props", "currentTabId"]);
-  const emits = defineEmits(["onMountedMe"]);
+  defineOptions({name: "ReadMe"});
+  const props = defineProps(["props", "currentTabId", "isFirstVisit", "config", "configWatcher", "step"]);
+  const emits = defineEmits(["updateMe", "updateStep", "updateConfig", "onClickedLink"]);
 
   let initialTabId = "top";
   if(props.props.didUpdate){
@@ -23,7 +24,7 @@
   };
 
   onMounted(()=>{
-    emits("onMountedMe", tabData, initialTabId);
+    emits("updateMe", tabData, initialTabId);
   });
 </script>
 

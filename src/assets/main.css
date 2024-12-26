@@ -1,6 +1,4 @@
 body {
-  margin: 0;
-  overflow: hidden;
   font-size: 1rem;
 }
 
@@ -12,7 +10,14 @@ body {
   height: 100vh;
   z-index: 1;
 }
-
+#how-to-use {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+}
 #app {
   position: fixed;
   top: 0;
@@ -69,4 +74,14 @@ main{
 
 .unselected-content{
   display: none;
+}
+
+button {
+  background-color: #0c0;
+  border: 0.2rem solid #040;
+  border-radius: 0.4rem;
+  font-weight: bolder;
+}
+button:hover {
+  background-color: #0f0;
 }

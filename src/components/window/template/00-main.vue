@@ -1,7 +1,7 @@
 <script setup>
   import { defineEmits, defineOptions, defineProps, onMounted } from "vue";
 
-  defineOptions({name: "Top"});
+  defineOptions({name: "Hoge"});
   defineProps(["props", "currentTabId", "isFirstVisit", "config", "configWatcher", "step"]);
   const emits = defineEmits(["updateMe", "updateStep", "updateConfig", "onClickedLink"]);
 

@@ -5,14 +5,21 @@
   import MenuButton from "./components/MenuButton.vue";
 
   import Top from "./components/window/top/00-main.vue";
+  import SettingComponent from "./components/window/setting/00-main.vue";
   import ReadMe from "./components/window/readMe/00-main.vue";
   import License from "./components/window/license/00-main.vue";
+
+  import TimetableConfig from "./models/TimetableConfig.js";
 
   // メニューの選択肢を定義
   const tabData = {
     top : {
       text: "トップ",
-      cmp: Top
+      cmp: Top,
+    },
+    setting: {
+      text: "情報入力",
+      cmp: SettingComponent,
     },
     readMe : {
       text: "説明書",
@@ -38,30 +45,40 @@
     if(tabData[tabId].props == null){
       tabData[tabId].props = {};
     }
-    if(tabData[tabId].isNeedLink == null){
-      tabData[tabId].isNeedLink = false;
-    }
   }
 
   // メインメニューの選択値の管理
   const currentTabId = ref("");
   const menuSelectionLog = [];
+  // 画面が開かれたときに最初に表示するメニューを決定する処理と
+  // ユーザーが初回利用なのか判断する処理
+  const isFirstVisit = ref(false);
   const savedVersion = localStorage.getItem("version");
-  if(localStorage.getItem("version") == window.appData.version){
-    currentTabId.value = "top";
+  if(savedVersion == window.appData.version){
+    currentTabId.value = "setting";
   } else {
+    if(savedVersion == null){
+      tabData.readMe.props.didUpdate = false;
+      isFirstVisit.value = true;
+    } else {
+      tabData.readMe.props.didUpdate = true;
+    }
     localStorage.setItem("version", window.appData.version);
-    tabData.readMe.props.didUpdate = !(savedVersion == null);
     currentTabId.value = "readMe";
   }
-  currentTabId.value = "top";
 
   // メインメニューに表示する選択肢の管理
   const step = ref(0);
   const drawTabList = [
-    ["top", "readMe", "license"],
-    ["top", "readMe", "license"],
+    ["setting", "readMe", "license"],
+    ["top", "setting", "readMe", "license"],
   ];
+  function updateStep(newStep) {
+    if(step.value == 0){
+      currentTabId.value = "top";
+    }
+    step.value = newStep;
+  }
 
   // メニューの選択変更処理
   function onClickedTabButton(id){
@@ -79,6 +96,9 @@
 
   // サブメニューの描画管理
   const drawSubMenu = ref(true);
+  const setDrawSubMenu = function(){
+    drawSubMenu.value = !drawSubMenu.value;
+  };
 
   // 画面サイズ変更時の処理
   const setAndSaveLength = function(){
@@ -87,8 +107,10 @@
     window.remFontSize = Number($("#back-layer").css("font-size").slice(0, -2));
     const mainMenuHeight = $("header").outerHeight();
     $(".main-window").outerHeight(window.screenHeight - mainMenuHeight);
+    $(".main-content").outerHeight(window.screenHeight - mainMenuHeight);
     const subMenuWidth = $("#window-of-select-sub-menu").outerWidth();
     $(".main-window").outerWidth(window.screenWidth - subMenuWidth);
+    $(".main-content").outerWidth(window.screenWidth - subMenuWidth);
     let maxButtonHeight = 0;
     $(".menu-btn").each(function(_, element){
       const height = $(element).outerHeight();
@@ -98,11 +120,22 @@
     });
     $(".menu-btn").outerHeight(maxButtonHeight);
   };
+
+  // Configの処理
+  const config = TimetableConfig.read(localStorage.getItem("config"));
+  const configWatcher = ref(true);
+  const updateConfig = function(newConfigData){
+    config.updateData(newConfigData);
+    localStorage.setItem("config", JSON.stringify(config.toObject()));
+    console.log("App.vue >> sent", newConfigData);
+    configWatcher.value = !configWatcher.value;
+  }
+  
   onUpdated(setAndSaveLength);
   window.addEventListener("resize", setAndSaveLength);
 
   // 初期化処理
-  const onMountedChildComponent = function(tabId, childTabData, initialTabId){
+  const updateChildComponent = function(tabId, childTabData, initialTabId){
     const updatedUnit = {
       didSetup: true,
       tabData: childTabData,
@@ -119,6 +152,7 @@
     font-weight: bolder;
     color: #0f0;
     padding-inline: 0.5em;
+    display: inline-block;
   }
   #draw-sub-menu-btn-div:hover {
     background-color: #777;
@@ -128,12 +162,12 @@
   }
   #download-btn {
     width: 7.5em;
-    color: #000;
     background-color: #0c0;
-    font-weight: bolder;
+    border-radius: 0;
+    border: none;
   }
   #download-btn:hover {
-    background-color: #0a0;
+    background-color: #0f0;
   }
   #message-span {
     color: #0f0
@@ -141,6 +175,7 @@
 </style>
 
 <template>
+  <div id="how-to-use" v-if="isFirstVisit"></div>
   <header>
     <span v-for="tabId in drawTabList[step]" :key="tabId">
       <MenuButton
@@ -151,15 +186,21 @@
       />
     </span>
     <div id="top-right-div">
+      <span id="message-span"></span>
       <button class="menu-btn" id="download-btn">Download</button>
     </div>
   </header>
   <main>
     <div id="window-of-select-sub-menu">
-      <div id="draw-sub-menu-btn-div" v-on:click="setDrawSubMenu"><span id="draw-sub-menu-btn-icon-span">▼</span></div>
+      <div id="draw-sub-menu-btn-div" v-on:click="setDrawSubMenu">
+        <span id="draw-sub-menu-btn-icon-span">
+          {{drawSubMenu ? '▼' : '▶'}}
+        </span>
+      </div>
       <ul id="sub-menu-ul" v-if="drawSubMenu">
         <li v-for="tabId in Object.keys(childData[currentTabId].tabData)" :key="tabId">
           <MenuButton
+            :main-tab-id="currentTabId"
             :tab-id="tabId"
             :text="childData[currentTabId].tabData[tabId].text"
             :is-clicked="tabId == childData[currentTabId].currentTabId"
@@ -170,19 +211,17 @@
     </div>
     <div v-for="tabId in drawTabList[step]" :key="tabId" :class="currentTabId == tabId ? 'main-window' : 'unselected-content'">
       <component
-        v-if="tabData[tabId].isNeedLink"
         :is="tabData[tabId].cmp"
         :current-tab-id="childData[tabId].currentTabId"
+        :step="step"
+        :config="config"
+        :config-watcher="configWatcher"
         :props="tabData[tabId].props"
-        @on-mounted-me="(tabData, initialTabId)=>{onMountedChildComponent(tabId, tabData, initialTabId)}"
-        @on-clicked-link="(toMainMenuId, toSubMenuId)=>{onClickedLinkButton(toMainMenuId, toSubMenuId)}"
-      />
-      <component
-        v-else
-        :is="tabData[tabId].cmp"
-        :current-tab-id="childData[tabId].currentTabId"
-        :props="tabData[tabId].props"
-        @on-mounted-me="(tabData, initialTabId)=>{onMountedChildComponent(tabId, tabData, initialTabId)}"
+        :is-first-visit="isFirstVisit"
+        @update-me="(tabData, initialTabId)=>{updateChildComponent(tabId, tabData, initialTabId)}"
+        @on-clicked-link="onClickedLinkButton"
+        @update-config="updateConfig"
+        @update-step="updateStep"
       />
     </div>
   </main>
