@@ -22,6 +22,11 @@ class AssignmentEditor extends Editor {
 }
 
 export default class AssignmentUtil extends Util {
+  constructor(relationship){
+    super(relationship);
+    this.editor = AssignmentEditor;
+  }
+  
   add(homeroomId, subjectId) {
     const parent = this.relationship.get(this).data;
     const assignment = parent.assignments.find(a => a.studentsHomeroomId == homeroomId && a.subjectId == subjectId);
@@ -204,11 +209,5 @@ export default class AssignmentUtil extends Util {
     } else {
       return assignments;
     }
-  }
-
-  setId(id){
-    const editor = new AssignmentEditor(id, this.relationship);
-    this.relationship.set(editor, this.relationship.get(this));
-    return editor;
   }
 }

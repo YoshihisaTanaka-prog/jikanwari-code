@@ -38,7 +38,12 @@ class SpecialRoomEditor extends Editor {
   }
 }
 
-export default class SpecicalRoomUtil extends Util {  
+export default class SpecicalRoomUtil extends Util {
+  constructor(relationship){
+    super(relationship);
+    this.editor = SpecialRoomEditor;
+  }
+  
   add(name){
     const parent = this.relationship.get(this).data;
     const classroom = parent.classroomData.specials.find(c => c.name == name);
@@ -54,10 +59,5 @@ export default class SpecicalRoomUtil extends Util {
   getList(){
     const parent = this.relationship.get(this).data;
     return parent.classroomData.specials;
-  }
-  setId(id){
-    const editor = new SpecialRoomEditor(id, this.relationship);
-    this.relationship.set(editor, this.relationship.get(this));
-    return editor;
   }
 }

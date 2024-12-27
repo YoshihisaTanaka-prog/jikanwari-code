@@ -1,13 +1,13 @@
 // 全体管理データ
-import TimetableConfigData from './TimeTableConfig/Data/Main';
+import TimetableConfigData from './Data/Main';
 
 // Utilをまとめてインポート
-import GradesUtil from './TimeTableConfig/Utils/Grades';
-import SubjectUtil from './TimeTableConfig/Utils/Subject';
-import HomeroomUtil from './TimeTableConfig/Utils/Homeroom';
-import TeacherUtil from './TimeTableConfig/Utils/Teacher';
-import AssignmentUtil from './TimeTableConfig/Utils/Assignment';
-import SpecicalRoomUtil from './TimeTableConfig/Utils/SpecalRoom';
+import GradesUtil from './Utils/Grades';
+import SubjectUtil from './Utils/Subject';
+import HomeroomUtil from './Utils/Homeroom';
+import TeacherUtil from './Utils/Teacher';
+import AssignmentUtil from './Utils/Assignment';
+import SpecicalRoomUtil from './Utils/SpecalRoom';
 
 
 class TimetableConfig {

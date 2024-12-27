@@ -40,14 +40,13 @@ class HomeroomEditor extends Editor {
 }
 
 export default class HomeroomUtil extends Util {
+  constructor(relationship){
+    super(relationship);
+    this.editor = HomeroomEditor;
+  }
+  
   getList(){
     return this.relationship.get(this).data.classroomData.homes;
-  }
-
-  setId(id){
-    const editor = new HomeroomEditor(id, this.relationship);
-    this.relationship.set(editor, this.relationship.get(this));
-    return editor;
   }
 
   setByNumber(grade, classNumber){

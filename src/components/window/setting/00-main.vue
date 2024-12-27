@@ -6,7 +6,7 @@
   import SchoolInfoSetting from "./SchoolInfo/00-Main.vue";
   import UploadSetting from "./UploadSetting.vue";
 
-  import TimetableConfig from "@/models/TimetableConfig";
+  import TimetableConfig from "@/models/TimeTableConfig/config.js";
   
   defineOptions({name: "Setting"});
   const props = defineProps({

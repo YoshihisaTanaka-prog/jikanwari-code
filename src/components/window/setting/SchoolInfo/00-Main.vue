@@ -95,7 +95,7 @@
   import SpecialRoomE_JH from './SpecialRoom/ElementalAndJuniorHighSchool.vue';
   import SpecialRoomH from './SpecialRoom/HighSchool.vue';
 
-  import TimetableConfig from '@/models/TimetableConfig';
+  import TimetableConfig from '@/models/TimeTableConfig/config.js';
 
   defineOptions({name: "SchoolInfoSetting"});
   const props = defineProps({

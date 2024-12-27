@@ -78,7 +78,7 @@
   import SubjectGroup from './SubjectGroup.vue';
   import SubjectUnit from "./SubjectUnit.vue";
 
-  import TimetableConfig from '@/models/TimetableConfig';
+  import TimetableConfig from '@/models/TimeTableConfig/config.js';
 
   defineProps(["subjects"]);
   const emits = defineEmits(["addSubject", "addSubSubject", "updateSubject"]);

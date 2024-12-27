@@ -65,7 +65,7 @@
   import HideButton from '@/components/HideButton.vue';
   import SubjectUnit from './SubjectUnit.vue';
 
-  import TimetableConfig from '@/models/TimetableConfig';
+  import TimetableConfig from '@/models/TimeTableConfig/config.js';
 
   const props = defineProps(["isElemental", "subjects"]);
   const emits = defineEmits(["addSubject", "updateSubject"]);

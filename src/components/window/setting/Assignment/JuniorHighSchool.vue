@@ -131,7 +131,7 @@
 <script setup>
   import { defineEmits, defineOptions, defineProps, ref, watch } from 'vue';
 
-  import TimetableConfig from '@/models/TimetableConfig';
+  import TimetableConfig from '@/models/TimeTableConfig/config.js';
   import PostAndNameAndSubject from './teacher/PostAndNameAndSubject.vue';
   import JuniorHighSchoolAssignmetGroup from './UnitGroup/JuniorHighSchool.vue';
 

@@ -35,7 +35,7 @@
   import JuniorHighSchoolAssignment from './JuniorHighSchool.vue';
   import HighSchoolAssignment from './HighSchool.vue';
 
-  import TimetableConfig from '@/models/TimetableConfig';
+  import TimetableConfig from '@/models/TimeTableConfig/config.js';
 
   defineOptions({name: "AssignmentSetting"});
   defineProps({

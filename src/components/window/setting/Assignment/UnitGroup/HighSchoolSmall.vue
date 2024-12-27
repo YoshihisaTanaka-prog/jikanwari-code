@@ -57,7 +57,7 @@
 
   import HighSchoolUnit from '../Unit/HighSchool.vue';
   import HideButton from '@/components/HideButton.vue';
-  import TimetableConfig from '@/models/TimetableConfig';
+  import TimetableConfig from '@/models/TimeTableConfig/config.js';
 
   defineOptions({name: "AssignmentSmallGroupH"})
   const props = defineProps({

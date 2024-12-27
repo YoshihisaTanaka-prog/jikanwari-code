@@ -9,7 +9,7 @@
   import ReadMe from "./components/window/readMe/00-main.vue";
   import License from "./components/window/license/00-main.vue";
 
-  import TimetableConfig from "./models/TimetableConfig.js";
+  import TimetableConfig from "@/models/TimeTableConfig/config.js";
 
   // メニューの選択肢を定義
   const tabData = {

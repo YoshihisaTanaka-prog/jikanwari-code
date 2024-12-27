@@ -61,6 +61,11 @@ class TeacherEditor extends Editor {
 }
 
 export default class TeacherUtil extends Util {
+  constructor(relationship){
+    super(relationship);
+    this.editor = TeacherEditor;
+  }
+  
   add(name){
     const parent = this.relationship.get(this).data;
     const teacher = parent.teachers.find(t => t.name == name);
@@ -223,10 +228,5 @@ export default class TeacherUtil extends Util {
     } else {
       return {unset: parent.teachers.map(t => parent.getTeacherObj(t.id))};
     }
-  }
-  setId(id){
-    const editor = new TeacherEditor(id, this.relationship);
-    this.relationship.set(editor, this.relationship.get(this));
-    return editor;
   }
 }

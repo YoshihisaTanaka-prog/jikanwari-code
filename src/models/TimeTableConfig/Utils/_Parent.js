@@ -10,6 +10,11 @@ export class Util {
   toObject(){
     return this.relationship.get(this).toObject();
   }
+  setId(id){
+    const editor = new this.Editor(id, this.relationship);
+    this.relationship.set(editor, this.relationship.get(this));
+    return editor;
+  }
 }
 
 export class Editor {

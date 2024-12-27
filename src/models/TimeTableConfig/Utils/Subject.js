@@ -90,7 +90,12 @@ class SubjectEditor extends Editor {
   }
 }
 
-export default class SubjectUtil extends Util {  
+export default class SubjectUtil extends Util {
+  constructor(relationship){
+    super(relationship);
+    this.editor = SubjectEditor;
+  }
+  
   add(name, genre){
     const parent = this.relationship.get(this).data;
     const subject = parent.subjects.find((subject) => subject.name === name);
@@ -119,11 +124,5 @@ export default class SubjectUtil extends Util {
         return 1;
       }
     });
-  }
-
-  setId(id){
-    const editor = new SubjectEditor(id, this.relationship);
-    this.relationship.set(editor, this.relationship.get(this));
-    return editor;
   }
 }
